@@ -1,0 +1,5 @@
+.GitItonal.spec
+build/
+dist/
+__pycache__/
+repos/*

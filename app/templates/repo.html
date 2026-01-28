@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Repository: {{ repo_name }}</h2>
+
+<p><a href="/">← Back to repository list</a></p>
+{% if files %}
+<h3>Files</h3>
+<div class="files-list">
+  {% for f in files %}
+  <div class="file-item">
+    <span class="file-icon">📄</span>
+    <span class="file-name">{{ f }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if commits %}
+<h3>Commits</h3>
+<table>
+  <tr>
+    <th>Commit</th>
+    <th>Message</th>
+  </tr>
+  {% for c in commits %}
+  <tr>
+    <td>{{ c.hash }}</td>
+    <td>{{ c.message }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p><em>No commits found.</em></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,112 @@
+/* ====== GLOBAL ====== */
+body {
+  background: #c0c0c0; /* Windows classic gray */
+  color: #000000;
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+/* ====== HEADER ====== */
+header {
+  background: linear-gradient(#003399, #001f66); /* classic blue gradient */
+  color: #ffffff;
+  padding: 15px;
+  border: 3px solid #000000;
+  box-shadow: inset 2px 2px 0 #ffffff, inset -2px -2px 0 #000000;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.2em;
+  letter-spacing: 1px;
+}
+
+header p {
+  margin: 5px 0 0;
+  font-size: 0.9em;
+  color: #ffff99;
+}
+
+/* ====== HEADINGS ====== */
+h2, h3 {
+  color: #003399;
+  background: #e0e0e0;
+  border: 2px solid #000000;
+  padding: 5px 10px;
+  box-shadow: inset 1px 1px 0 #ffffff;
+  font-size: 1.3em;
+}
+
+/* ====== LINKS ====== */
+a {
+  color: #0000ff;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #ff0000;
+  background: #ffff00;
+}
+
+/* ====== TABLES ====== */
+table {
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #ffffff;
+  border: 3px solid #000000;
+}
+
+th {
+  background: #000080;
+  color: #ffffff;
+  font-size: 0.9em;
+  padding: 6px 12px;
+  border: 2px solid #000000;
+}
+
+td {
+  padding: 6px 12px;
+  border: 2px solid #000000;
+  font-size: 0.9em;
+}
+
+tr:nth-child(even) td {
+  background: #f0f0ff;
+}
+
+/* ====== FILE LIST ====== */
+.files-list {
+  background: #ffffff;
+  border: 3px solid #000000;
+  padding: 10px;
+  width: fit-content;
+}
+
+.file-item {
+  padding: 4px 0;
+  font-family: "Courier New", monospace;
+}
+
+.file-icon {
+  margin-right: 6px;
+}
+
+/* ====== FOOTER ====== */
+footer {
+  margin-top: 30px;
+  padding: 10px;
+  background: #e0e0e0;
+  border: 2px solid #000000;
+  text-align: center;
+  font-size: 0.8em;
+  box-shadow: inset 1px 1px 0 #ffffff;
+}
+
+/* ====== HR ====== */
+hr {
+  border: none;
+  border-top: 2px dashed #000000;
+  margin: 10px 0;
+}

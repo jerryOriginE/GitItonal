@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Repositories</h2>
+
+{% if repos %}
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+  {% for repo in repos %}
+  <tr>
+    <td><a href="/repo/{{ repo }}">{{ repo }}</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p><em>No repositories found.</em></p>
+{% endif %}
+
+{% endblock %}
