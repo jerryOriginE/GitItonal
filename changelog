@@ -1,0 +1,12 @@
+# Changelog
+
+## [Released]
+## v1.0.2
+
+### Added
+- Folder nesting view
+- Individual file view
+
+## Pending
+- Centralized repo location to be able to launch from anywhere
+- Automatic localhost:8000 tab opening upon launch

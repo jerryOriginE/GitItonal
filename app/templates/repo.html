@@ -4,13 +4,36 @@
 <h2>Repository: {{ repo_name }}</h2>
 
 <p><a href="/">← Back to repository list</a></p>
-{% if files %}
-<h3>Files</h3>
+
+{% if tree_path %}
+  <p>
+    <strong>Path:</strong>
+    <a href="/repo/{{ repo_name }}">/</a>
+    {% set segments = tree_path.split('/') %}
+    {% set current = [] %}
+    {% for seg in segments %}
+      {% set _ = current.append(seg) %}
+      / <a href="/repo/{{ repo_name }}/tree/{{ '/'.join(current) }}">{{ seg }}</a>
+    {% endfor %}
+  </p>
+{% endif %}
+
+{% if entries %}
+<h3>Contents</h3>
 <div class="files-list">
-  {% for f in files %}
+  {% if tree_path %}
+  <span class="file-icon">📁</span>
+  <a href="/repo/{{ repo_name }}/tree/{{ tree_path.rsplit('/', 1)[0] if '/' in tree_path else '' }}">..</a>
+  {% endif %}
+  {% for entry in entries %}
   <div class="file-item">
-    <span class="file-icon">📄</span>
-    <span class="file-name">{{ f }}</span>
+    {% if entry.type == 'tree' %}
+      <span class="file-icon">📁</span>
+      <a class="file-name" href="/repo/{{ repo_name }}/tree/{{ entry.path }}">{{ entry.name }}</a>
+    {% else %}
+      <span class="file-icon">📄</span>
+      <a href="/repo/{{ repo_name }}/file/{{ entry.path }}">{{ entry.name }}</a>
+    {% endif %}
   </div>
   {% endfor %}
 </div>

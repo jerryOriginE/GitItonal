@@ -3,13 +3,14 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from .gitutils import list_repos, get_commits, get_files
+from .gitutils import list_repos, get_commits, get_tree
 from .git_sync import sync_repos
 
 import uvicorn
+from .gitutils import get_file_content
 
 app = FastAPI()
-sync_repos()
+#sync_repos()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
@@ -35,16 +36,66 @@ def view_repo(request: Request, repo_name: str):
         return HTMLResponse(content="Repository not found", status_code=404)
 
     commits = get_commits(REPO_DIR, repo_name, n=10) if repos else []
-    files = get_files(REPO_DIR, repo_name, commits[0]["hash"]) if commits else []
+    entries = get_tree(REPO_DIR, repo_name, commits[0]["hash"], "") if commits else []
     return templates.TemplateResponse(
         "repo.html",
         {
             "request": request,
             "repo_name": repo_name,
             "commits": commits,
-            "files": files,
+            "entries": entries,
+            "tree_path": "",
         },
     )
+
+@app.get("/repo/{repo_name}/tree/{tree_path:path}", response_class=HTMLResponse)
+def view_repo_tree(request: Request, repo_name: str, tree_path: str):
+    repos = list_repos(REPO_DIR)
+    if repo_name not in repos:
+        return HTMLResponse(content="Repository not found", status_code=404)
+
+    commits = get_commits(REPO_DIR, repo_name, n=10) if repos else []
+    if not commits:
+        return HTMLResponse(content="No commits found", status_code=404)
+
+    entries = get_tree(REPO_DIR, repo_name, commits[0]["hash"], tree_path)
+    return templates.TemplateResponse(
+        "repo.html",
+        {
+            "request": request,
+            "repo_name": repo_name,
+            "commits": commits,
+            "entries": entries,
+            "tree_path": tree_path.strip("/"),
+        },
+    )
+
+@app.get("/repo/{repo_name}/file/{file_path:path}", response_class=HTMLResponse)
+def view_file(request: Request, repo_name: str, file_path: str):
+    repos = list_repos(REPO_DIR)
+    if repo_name not in repos:
+        return HTMLResponse(content="Repository not found", status_code=404)
+
+    commits = get_commits(REPO_DIR, repo_name, n=10) if repos else []
+    if not commits:
+        return HTMLResponse(content="No commits found", status_code=404)
+
+    content = get_file_content(REPO_DIR, repo_name, commits[0]["hash"], file_path)
+    if not content:
+        return HTMLResponse(content="File not found", status_code=404)
+    
+    return templates.TemplateResponse(
+        "file.html",
+        {
+            "request": request,
+            "repo_name": repo_name,
+            "file_path": file_path,
+            "content": content,
+            "commits": commits,
+            "file_content": content,
+        },
+    )
+
 
 @app.get("/repos", response_class=HTMLResponse)
 def ping():
