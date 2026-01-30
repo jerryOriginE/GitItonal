@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -9,8 +11,43 @@ from .git_sync import sync_repos
 import uvicorn
 from .gitutils import get_file_content
 
+LANGUAGE_BY_EXTENSION = {
+    ".py": "python",
+    ".js": "javascript",
+    ".ts": "typescript",
+    ".jsx": "javascript",
+    ".tsx": "typescript",
+    ".json": "json",
+    ".html": "xml",
+    ".htm": "xml",
+    ".css": "css",
+    ".md": "markdown",
+    ".yml": "yaml",
+    ".yaml": "yaml",
+    ".sh": "bash",
+    ".bash": "bash",
+    ".zsh": "bash",
+    ".toml": "ini",
+    ".ini": "ini",
+    ".cfg": "ini",
+    ".xml": "xml",
+    ".java": "java",
+    ".c": "c",
+    ".h": "c",
+    ".cpp": "cpp",
+    ".hpp": "cpp",
+    ".go": "go",
+    ".rs": "rust",
+    ".rb": "ruby",
+    ".php": "php",
+}
+
+def detect_language(file_path: str) -> str:
+    _, ext = os.path.splitext(file_path.lower())
+    return LANGUAGE_BY_EXTENSION.get(ext, "plaintext")
+
 app = FastAPI()
-#sync_repos()
+sync_repos()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
@@ -83,6 +120,8 @@ def view_file(request: Request, repo_name: str, file_path: str):
     content = get_file_content(REPO_DIR, repo_name, commits[0]["hash"], file_path)
     if not content:
         return HTMLResponse(content="File not found", status_code=404)
+
+    language = detect_language(file_path)
     
     return templates.TemplateResponse(
         "file.html",
@@ -93,6 +132,7 @@ def view_file(request: Request, repo_name: str, file_path: str):
             "content": content,
             "commits": commits,
             "file_content": content,
+            "language": language,
         },
     )
 
