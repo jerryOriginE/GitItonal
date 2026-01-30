@@ -1,5 +1,7 @@
 # GitItonal
 
+![](images/header.png)
+
 GitItonal is a small, personal project for browsing my own Git repositories
 stored on a private server.
 
